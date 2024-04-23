@@ -168,6 +168,7 @@ export async function executeScenario<T extends TransactionCommon>(scenario: Sce
             ),
           );
         }
+      };
 
         try {
           testTransaction.expect?.(previousAccount, scenarioAccount);
