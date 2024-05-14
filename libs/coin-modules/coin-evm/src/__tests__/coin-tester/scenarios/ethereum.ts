@@ -4,7 +4,6 @@ import { ethers, providers } from "ethers";
 import { killSpeculos, spawnSpeculos } from "@ledgerhq/coin-tester/signers/speculos";
 import { encodeTokenAccountId } from "@ledgerhq/coin-framework/account/index";
 import { Scenario, ScenarioTransaction } from "@ledgerhq/coin-tester/main";
-import { getCryptoCurrencyById } from "@ledgerhq/cryptoassets/currencies";
 import { buildAccountBridge, buildCurrencyBridge } from "../../../bridge/js";
 import { makeAccount } from "../../fixtures/common.fixtures";
 import { EvmNftTransaction, Transaction as EvmTransaction } from "../../../types";
@@ -20,6 +19,7 @@ import {
 } from "../helpers";
 import { clearExplorerAppendix, getLogs, setBlock } from "../indexer";
 import { killAnvil, spawnAnvil } from "../anvil";
+import { defaultNanoApp } from "../scenarios.test";
 
 const makeScenarioTransactions = ({
   address,
@@ -127,8 +127,6 @@ const makeScenarioTransactions = ({
   ];
 };
 
-const defaultNanoApp = { firmware: "2.2.3" as const, version: "1.10.4" as const };
-
 export const scenarioEthereum: Scenario<EvmTransaction> = {
   name: "Ledger Live Basic ETH Transactions",
   setup: async () => {
@@ -165,7 +163,7 @@ export const scenarioEthereum: Scenario<EvmTransaction> = {
     const getAddress = resolver(signerContext);
     const { address } = await getAddress("", {
       path: "44'/60'/0'/0/0",
-      currency: getCryptoCurrencyById("ethereum"),
+      currency: ethereum,
       derivationMode: "",
     });
 
