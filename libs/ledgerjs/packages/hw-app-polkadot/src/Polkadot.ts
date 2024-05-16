@@ -31,6 +31,7 @@ const SW_OK = 0x9000;
 const SW_CANCEL = 0x6986;
 const SW_ERROR_DATA_INVALID = 0x6984;
 const SW_ERROR_BAD_KEY_HANDLE = 0x6a80;
+
 /**
  * Polkadot API
  *
