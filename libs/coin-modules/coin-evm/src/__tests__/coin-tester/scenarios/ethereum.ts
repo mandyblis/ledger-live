@@ -135,7 +135,6 @@ export const scenarioEthereum: Scenario<EvmTransaction> = {
       spawnAnvil("https://rpc.ankr.com/eth"),
     ]);
 
-    const provider = new providers.StaticJsonRpcProvider("http://127.0.0.1:8545");
     const signerContext: Parameters<typeof resolver>[0] = (deviceId, fn) => fn(new Eth(transport));
 
     setCoinConfig(() => ({
@@ -170,6 +169,8 @@ export const scenarioEthereum: Scenario<EvmTransaction> = {
     const scenarioAccount = makeAccount(address, ethereum);
 
     await setBlock();
+
+    const provider = new providers.StaticJsonRpcProvider("http://127.0.0.1:8545");
 
     // Binance account
     await impersonnateAccount({
