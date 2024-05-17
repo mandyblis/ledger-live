@@ -125,19 +125,6 @@ const signOperation: SignOperationFnSignature<Transaction> = ({ account, transac
             transaction.amount = balance; // force the amount to be the max
           }
 
-          // send trc20 to a new account is forbidden by us (because it will not activate the account)
-          if (
-            transaction.recipient &&
-            transaction.mode === "send" &&
-            subAccount &&
-            subAccount.type === "TokenAccount" &&
-            subAccount.token.tokenType === "trc20" &&
-            !isContractAddressRecipient && // send trc20 to a smart contract is allowed
-            (await fetchTronAccount(transaction.recipient)).length === 0
-          ) {
-            throw new TronSendTrc20ToNewAccountForbidden();
-          }
-
           const getPreparedTransaction = () => {
             switch (transaction.mode) {
               case "freeze":
