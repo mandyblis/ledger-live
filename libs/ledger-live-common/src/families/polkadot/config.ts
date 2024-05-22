@@ -12,7 +12,7 @@ export const polkadotConfig: Record<string, ConfigInfo> = {
         url: getEnv("API_POLKADOT_SIDECAR"),
       },
       metadataShortener: {
-        url: "https://api.zondax.ch/polkadot/transaction/metadata",
+        url: "https://polkadot-metadata-shortener.api.live.ledger.com",
       },
     },
   },
