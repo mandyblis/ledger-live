@@ -28,6 +28,7 @@ import type {
 } from "./sidecar.types";
 import { createRegistryAndExtrinsics } from "./common";
 import { getCoinConfig } from "../config";
+import { ApiPromise, WsProvider } from "@polkadot/api";
 
 /**
  * Returns the full indexer url for en route endpoint.
@@ -495,7 +496,7 @@ export const getTransactionParams = async () => {
  * @async
  * @param {string} extrinsic - the encoded extrinsic to send
  *
- * @returns {string>} - the broadcasted transaction's hah
+ * @returns {string>} - the broadcasted transaction's hash
  */
 export const submitExtrinsic = async (extrinsic: string): Promise<string> => {
   const {
@@ -509,7 +510,22 @@ export const submitExtrinsic = async (extrinsic: string): Promise<string> => {
       tx: extrinsic,
     },
   });
+
   return data.hash;
+};
+
+/**
+ * Broadcast the transaction to the substrate node
+ *
+ * @async
+ * @param {string} extrinsic - the encoded extrinsic to send
+ *
+ * @returns {string>} - the broadcasted transaction's hash
+ */
+export const broadcastToNode = async (api: ApiPromise, extrinsic: string): Promise<string> => {
+  const hash = await api.rpc.author.submitExtrinsic(extrinsic);
+
+  return hash.toString();
 };
 
 /**

@@ -12,6 +12,7 @@ import {
   isElectionClosed as sidecarIsElectionClosed,
   paymentInfo as sidecarPaymentInfo,
   submitExtrinsic as sidecarSubmitExtrinsic,
+  broadcastToNode,
   verifyValidatorAddresses as sidecarVerifyValidatorAddresses,
 } from "./sidecar";
 import BigNumber from "bignumber.js";
@@ -101,6 +102,7 @@ export default {
   isNewAccount,
   shortenMetadata,
   submitExtrinsic: async (extrinsic: string) => sidecarSubmitExtrinsic(extrinsic),
+  broadcastToNode,
   verifyValidatorAddresses: async (validators: string[]): Promise<string[]> =>
     sidecarVerifyValidatorAddresses(validators),
 };
