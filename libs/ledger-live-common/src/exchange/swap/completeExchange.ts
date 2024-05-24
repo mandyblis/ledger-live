@@ -73,7 +73,7 @@ const completeExchange = (
           refundAccount,
           transaction,
         );
-        
+
         if (unsubscribed) return;
 
         const errorsKeys = Object.keys(errors).filter(item =>
