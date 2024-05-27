@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { device as trustchainDevice } from "@ledgerhq/hw-trustchain";
-import { sdk } from "@ledgerhq/trustchain";
+import { getSdk } from "@ledgerhq/trustchain";
+import { getEnv, setEnv } from "@ledgerhq/live-env";
 import { withDevice } from "@ledgerhq/live-common/hw/deviceAccess";
 import { from } from "rxjs";
 import styled from "styled-components";
@@ -10,6 +11,8 @@ const Container = styled.div`
   padding: 20px;
   margin: 0 auto;
   max-width: 800px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Label = styled.label`
@@ -43,6 +46,27 @@ const App = () => {
     }).subscribe(p => setPubkey(uint8arrayToHex(p.publicKey)));
   }, []);
 
+  const [isMockEnv, setMockEnv] = useState(!!getEnv("MOCK"));
+  const [sdk, setSdk] = useState(getSdk());
+  const [credentials, setCredentials] = useState<any>("");
+
+  const toggleMockEnv = async () => {
+    const mockEnv = !!getEnv("MOCK");
+    setEnv("MOCK", mockEnv ? "" : "1");
+    setMockEnv(!mockEnv);
+    const sdk = getSdk();
+    setSdk(sdk);
+    try {
+      setCredentials(sdk.initLiveCredentials());
+    } catch (e: any) {
+      setCredentials(e.message)
+    }
+  };
+
+  useEffect(() => {
+    toggleMockEnv();
+  }, []);
+
   const onSeedIdAuthenticate = useCallback(() => {
     withDevice("webhid")(transport => from(sdk.seedIdAuthenticate(transport))).subscribe({
       next: t => setSeedIdAccessToken(t),
@@ -51,7 +75,7 @@ const App = () => {
         setSeedIdAccessToken(null);
       },
     });
-  }, []);
+  }, [sdk]);
 
   const onInitLiveCredentials = useCallback(() => {
     sdk.initLiveCredentials().then(
@@ -85,6 +109,19 @@ const App = () => {
         <button onClick={onRequestPublicKey}>Get Pub Key</button>
         <strong>
           <code>{pubkey ? pubkey : ""}</code>
+        </strong>
+      </Label>
+
+      <Label>
+      <button onClick={toggleMockEnv}>Toggle Mock Env</button>
+      <strong>
+          MOCK ENV : <code>{JSON.stringify(isMockEnv)}</code>
+        </strong>
+      </Label>
+
+      <Label>
+        <strong>
+          Live Credentials : <code>{JSON.stringify(credentials)}</code>
         </strong>
       </Label>
 
