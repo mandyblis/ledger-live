@@ -1,5 +1,11 @@
 import { JWT, LiveCredentials, Trustchain, TrustchainMember, TrustchainSDK } from "./types";
-import { crypto, device, Challenge } from "@ledgerhq/hw-trustchain";
+import {
+  crypto,
+  device,
+  Challenge,
+  CommandStream,
+  CommandStreamEncoder,
+} from "@ledgerhq/hw-trustchain";
 import Transport from "@ledgerhq/hw-transport";
 import api from "./api";
 import { KeyPair as CryptoKeyPair } from "@ledgerhq/hw-trustchain/Crypto";
@@ -82,14 +88,41 @@ class SDK implements TrustchainSDK {
     return response;
   }
 
+  // TODO: JWT could be refreshed during this method, should we return it in the Promise?
   async getOrCreateTrustchain(
     transport: Transport,
     seedIdToken: JWT,
     liveInstanceCredentials: LiveCredentials,
   ): Promise<Trustchain> {
-    void transport;
-    void seedIdToken;
+    let jwt = seedIdToken;
+    const hw = device.apdu(transport);
+
     void liveInstanceCredentials;
+
+    let all = await api.getTrustchains(jwt);
+    let keys = Object.keys(all);
+    if (keys.length === 0) {
+      // no trustchain yet, let's create one
+
+      // create a new trustchain
+      let stream = new CommandStream([]);
+      let topic; // FIXME what is this in our case?
+      stream = await stream.edit().seed(topic).issue(hw);
+      const commandStream = CommandStreamEncoder.encode(stream.blocks);
+      await api.postSeed(jwt, crypto.to_hex(commandStream));
+
+      jwt = await api.refreshAuth(jwt);
+
+      all = await api.getTrustchains(jwt);
+      keys = Object.keys(all);
+    }
+
+    // get the trustchain
+    console.log(keys);
+
+    // const trustchainId = keys[0];
+    // const trustchainData =
+
     throw new Error("getOrCreateTrustchain not implemented.");
   }
 
