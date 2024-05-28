@@ -130,7 +130,7 @@ const makeScenarioTransactions = ({
 export const scenarioEthereum: Scenario<EvmTransaction> = {
   name: "Ledger Live Basic ETH Transactions",
   setup: async () => {
-    const [{ transport, onSignerConfirmation }] = await Promise.all([
+    const [{ transport, getOnSpeculosConfirmation }] = await Promise.all([
       spawnSpeculos(`/${defaultNanoApp.firmware}/Ethereum/app_${defaultNanoApp.version}.elf`),
       spawnAnvil("https://rpc.ankr.com/eth"),
     ]);
@@ -157,6 +157,7 @@ export const scenarioEthereum: Scenario<EvmTransaction> = {
       },
     }));
 
+    const onSignerConfirmation = getOnSpeculosConfirmation();
     const currencyBridge = buildCurrencyBridge(signerContext);
     const accountBridge = buildAccountBridge(signerContext);
     const getAddress = resolver(signerContext);
