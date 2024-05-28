@@ -1,0 +1,63 @@
+name: Affected Reusable
+
+on:
+  workflow_call:
+    outputs:
+      affected:
+        description: "JSON of affected packages"
+        value: ${{ jobs.turbo-affected.outputs.affected }}
+      packages:
+        description: "Array of affected packages"
+        value: ${{ jobs.turbo-affected.outputs.packages }}
+      paths:
+        description: "Array of affected paths"
+        value: ${{ jobs.turbo-affected.outputs.paths }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref_name != 'develop' && github.ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  number: ${{ github.event.pull_request.number || -1 }}
+  head_sha: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha }}
+  head_branch: ${{ github.event.pull_request.head.ref || github.event.merge_group.head_ref }}
+  base_sha: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
+  base_branch: ${{ github.event.pull_request.base.ref || github.event.merge_group.base_ref }}
+  base_owner: ${{ github.event.pull_request.base.repo.owner.login || github.repository_owner }}
+  is_fork: ${{ github.event.pull_request.head.repo.fork || false }}
+  ref: ${{ github.sha }}
+
+jobs:
+  turbo-affected:
+    name: "Run Turbo Affected"
+    runs-on: ubuntu-22.04
+    outputs:
+      affected: ${{ steps.affected.outputs.affected }}
+      packages: ${{ steps.affected.outputs.packages }}
+      paths: ${{ steps.affected.outputs.paths }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/github-script@v6
+        id: clean-refs
+        with:
+          script: |
+            const head_branch = "${{ env.head_branch }}";
+            const base_branch = "${{ env.base_branch }}";
+
+            const newHeadBranch = head_branch.replace("refs/heads/", "");
+            const newBaseBranch = base_branch.replace("refs/heads/", "");
+
+            core.exportVariable("head_branch", newHeadBranch);
+            core.exportVariable("base_branch", newBaseBranch);
+
+      - uses: ./tools/actions/turbo-affected
+        id: affected
+        with:
+          ref: ${{ format('origin/{0}', env.base_branch) }}
