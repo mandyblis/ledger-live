@@ -212,6 +212,7 @@ export const scenarioPolygon: Scenario<EvmTransaction> = {
     return { currencyBridge, accountBridge, account: scenarioAccount, onSignerConfirmation };
   },
   getTransactions: address => makeScenarioTransactions({ address }),
+  mockIndexer: async () => {},
   beforeAll: account => {
     expect(account.balance.toFixed()).toBe(ethers.utils.parseEther("10000").toString());
     expect(account.subAccounts?.[0].type).toBe("TokenAccount");

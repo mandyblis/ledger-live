@@ -29,6 +29,11 @@ export const clearExplorerAppendix = (): void => {
   }
 };
 
+/**
+ *
+ * @description This function is used to setup coin tester accounts. We corectly index the transactions and operations for each account.
+ * Notaably, we identiy operations by type (ERC20, ERC721, ERC1155) and store them in a map by address.
+ */
 export const getLogs = async (): Promise<providers.Log[]> => {
   if (!fromBlock) {
     await setBlock();

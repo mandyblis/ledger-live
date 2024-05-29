@@ -228,6 +228,7 @@ export const scenarioEthereum: Scenario<EvmTransaction> = {
     expect(account.nfts?.length).toBe(2);
   },
   getTransactions: address => makeScenarioTransactions({ address }),
+  mockIndexer: async () => {},
   afterAll: account => {
     expect(account.subAccounts?.length).toBe(1);
     expect(account.subAccounts?.[0].balance.toFixed()).toBe(
