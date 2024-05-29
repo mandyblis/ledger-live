@@ -4,3 +4,4 @@ export { Media } from "./Media";
 export { Video } from "./Media/Video";
 export { Image } from "./Media/Image";
 export { Placeholder } from "./Media/Placeholder";
+export { DetailDrawer } from "./DetailDrawer";
