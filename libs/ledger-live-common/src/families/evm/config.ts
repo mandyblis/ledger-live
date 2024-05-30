@@ -685,6 +685,22 @@ const evmConfig: CurrencyLiveConfigDefinition = {
       explorer: { type: "etherscan", uri: "https://api-sepolia.lineascan.build/api" },
     },
   },
+  config_currency_scroll: {
+    type: "object",
+    default: {
+      status: { type: "active" },
+      node: { type: "external", uri: "https://rpc.scroll.io" },
+      explorer: { type: "etherscan", uri: "https://api.scrollscan.com/api" },
+    },
+  },
+  config_currency_scroll_sepolia: {
+    type: "object",
+    default: {
+      status: { type: "active" },
+      node: { type: "external", uri: "https://sepolia-rpc.scroll.io" },
+      explorer: { type: "etherscan", uri: "https://api-sepolia.scrollscan.com/api" },
+    },
+  },
 };
 
 export { evmConfig };

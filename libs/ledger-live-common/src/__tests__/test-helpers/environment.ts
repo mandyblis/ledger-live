@@ -98,6 +98,8 @@ setSupportedCurrencies([
   "lukso",
   "linea",
   "linea_sepolia",
+  "scroll",
+  "scroll_sepolia",
 ]);
 LiveConfig.setConfig(liveConfig);
 
