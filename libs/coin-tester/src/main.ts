@@ -151,7 +151,8 @@ export async function executeScenario<T extends TransactionCommon>(scenario: Sce
 
       const retry_limit = retryLimit ?? 10;
 
-      const expectHandler = async (retry: number) => {
+      async function expectHandler(retry: number) {
+        console.log({ retry });
         scenarioAccount = await firstValueFrom(
           accountBridge
             .sync(
@@ -169,11 +170,14 @@ export async function executeScenario<T extends TransactionCommon>(scenario: Sce
               )}. You might want to add tests in this transaction.`,
             ),
           );
+
+          return;
         }
 
         try {
           testTransaction.expect?.(previousAccount, scenarioAccount);
         } catch (err) {
+          console.log(JSON.stringify(err));
           if (!(err as { matcherResult?: { pass: boolean } })?.matcherResult?.pass) {
             if (retry === 0) {
               console.error(
@@ -188,13 +192,13 @@ export async function executeScenario<T extends TransactionCommon>(scenario: Sce
             }
 
             console.warn(chalk.magenta("Test asssertion failed. Retrying..."));
-            await new Promise(resolve => setTimeout(resolve, retryInterval ?? 5000));
+            await new Promise(resolve => setTimeout(resolve, retryInterval ?? 3 * 1000));
             await expectHandler(retry - 1);
           }
 
           throw err;
         }
-      };
+      }
 
       await scenario.mockIndexer?.(scenarioAccount, optimisticOperation);
       await expectHandler(retry_limit);
