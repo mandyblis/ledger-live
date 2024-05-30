@@ -13,10 +13,6 @@ on:
         description: "Array of affected paths"
         value: ${{ jobs.turbo-affected.outputs.paths }}
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref_name != 'develop' && github.ref || github.run_id }}
-  cancel-in-progress: true
-
 permissions:
   contents: read
   pull-requests: write
