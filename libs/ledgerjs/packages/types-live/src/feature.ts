@@ -113,6 +113,8 @@ export type CurrencyFeatures = {
   currencyLukso: DefaultFeature;
   currencyLinea: DefaultFeature;
   currencyLineaTesnet: DefaultFeature;
+  currencyScroll: DefaultFeature;
+  currencyScrollSepolia: DefaultFeature;
 };
 
 /**

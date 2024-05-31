@@ -75,6 +75,8 @@ const StepChooseCurrency = ({ currency, setCurrency }: StepProps) => {
   const lukso = useFeature("currencyLukso");
   const linea = useFeature("currencyLinea");
   const lineaSepolia = useFeature("currencyLineaTesnet");
+  const scroll = useFeature("currencyScroll");
+  const scrollSepolia = useFeature("currencyScrollSepolia");
 
   const featureFlaggedCurrencies = useMemo(
     (): Partial<Record<CryptoCurrencyId, Feature<unknown> | null>> => ({
@@ -118,6 +120,8 @@ const StepChooseCurrency = ({ currency, setCurrency }: StepProps) => {
       lukso,
       linea,
       linea_sepolia: lineaSepolia,
+      scroll,
+      scroll_sepolia: scrollSepolia,
     }),
     [
       axelar,
@@ -160,6 +164,8 @@ const StepChooseCurrency = ({ currency, setCurrency }: StepProps) => {
       lukso,
       linea,
       lineaSepolia,
+      scroll,
+      scrollSepolia,
     ],
   );
 
