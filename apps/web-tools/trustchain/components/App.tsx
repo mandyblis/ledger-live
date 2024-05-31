@@ -46,21 +46,15 @@ const App = () => {
     }).subscribe(p => setPubkey(uint8arrayToHex(p.publicKey)));
   }, []);
 
-  const [isMockEnv, setMockEnv] = useState(!!getEnv("MOCK"));
+  const [isMockEnv, setIsMockEnv] = useState(!!getEnv("MOCK"));
   const [sdk, setSdk] = useState(getSdk());
-  const [credentials, setCredentials] = useState<any>("");
 
   const toggleMockEnv = async () => {
-    const mockEnv = !!getEnv("MOCK");
-    setEnv("MOCK", mockEnv ? "" : "1");
-    setMockEnv(!mockEnv);
+    const isMockEnv = !!getEnv("MOCK");
+    setEnv("MOCK", isMockEnv ? "" : "1");
+    setIsMockEnv(!isMockEnv);
     const sdk = getSdk();
     setSdk(sdk);
-    try {
-      setCredentials(sdk.initLiveCredentials());
-    } catch (e: any) {
-      setCredentials(e.message)
-    }
   };
 
   useEffect(() => {
@@ -100,7 +94,7 @@ const App = () => {
         setTrustchain(null);
       },
     });
-  }, [seedIdAccessToken, liveCredentials]);
+  }, [seedIdAccessToken, liveCredentials, sdk]);
 
   return (
     <Container>
@@ -116,12 +110,6 @@ const App = () => {
       <button onClick={toggleMockEnv}>Toggle Mock Env</button>
       <strong>
           MOCK ENV : <code>{JSON.stringify(isMockEnv)}</code>
-        </strong>
-      </Label>
-
-      <Label>
-        <strong>
-          Live Credentials : <code>{JSON.stringify(credentials)}</code>
         </strong>
       </Label>
 
