@@ -33,7 +33,7 @@ for (const [i, currency] of currencies.entries()) {
     //@TmsLink("B2CQA-330")
     //@TmsLink("B2CQA-929")
 
-    test(`[${currency.uiName}] Add account`, async ({ page }) => {
+    test(`B2CQA-101 | [${currency.uiName}] Add account`, async ({ page }) => {
       const app = new Application(page);
 
       await app.portfolio.openAddAccountModal();
