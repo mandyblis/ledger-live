@@ -26,9 +26,7 @@ for (const [i, account] of accounts.entries()) {
       speculosOffset: i,
     });
 
-    //@TmsLink("B2CQA-249")
-
-    test(`[${account.currency.uiName}] Receive`, async ({ page }) => {
+    test(`B2CQA-249 | [${account.currency.uiName}] Receive`, async ({ page }) => {
       const app = new Application(page);
 
       await app.layout.goToAccounts();
