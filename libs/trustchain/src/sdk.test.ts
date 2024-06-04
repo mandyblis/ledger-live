@@ -1,0 +1,19 @@
+import { crypto } from "@ledgerhq/hw-trustchain";
+import { sdk } from "./sdk";
+
+test("encryptUserData + decryptUserData", async () => {
+  const obj = {
+    foobar: 42,
+    toto: "tata",
+  };
+  const keypair = await crypto.randomKeypair();
+  const trustchain = {
+    rootId: "",
+    walletSyncEncryptionKey: crypto.to_hex(keypair.privateKey),
+  };
+  const encrypted = await sdk.encryptUserData(trustchain, obj);
+  console.log(encrypted);
+  const decrypted = await sdk.decryptUserData(trustchain, encrypted);
+  console.log(decrypted);
+  expect(decrypted).toEqual(obj);
+});
