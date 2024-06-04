@@ -247,7 +247,7 @@ export const scenarioEthereum: Scenario<EvmTransaction, Account> = {
     expect(account.operations.length).toBe(7);
   },
   teardown: async () => {
-    await Promise.all([killSpeculos(), killAnvil()]);
     clearExplorerAppendix();
+    await Promise.all([killSpeculos(), killAnvil()]);
   },
 };
