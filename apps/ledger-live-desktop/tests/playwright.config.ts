@@ -41,24 +41,24 @@ const config: PlaywrightTestConfig = {
   fullyParallel: true,
   workers: "50%", // NOTE: 'macos-latest' and 'windows-latest' can't run 3 concurrent workers
   retries: 0, // We explicitly want to disable retries to be strict about avoiding flaky tests. (see https://github.com/LedgerHQ/ledger-live/pull/4918)
-  reporter: process.env.CI
-    ? [
-        ["html", { open: "never", outputFolder: "artifacts/html-report" }],
-        ["github"],
-        ["line"],
-        ["allure-playwright"],
-        [
-          "junit",
-          {
-            embedAnnotationsAsProperties: true,
-            textContentAnnotations: ["test_description"],
-            embedAttachmentsAsProperty: "testrun_evidence",
-            outputFile: "./xray-report.xml",
-          },
-        ], // Permet de trigger le Junit reporter
-        ["./utils/index.ts"], // todo: verifier si vraiment utile + changer le nom ? ==> Permet de trigger le Xray reporter
-      ]
-    : "allure-playwright",
+
+  /*reporter: [
+    //["html", { open: "never", outputFolder: "artifacts/html-report" }],
+    //["github"],
+    //["line"],
+    //["allure-playwright"],
+    [
+      "junit",
+      {
+        //embedAnnotationsAsProperties: true,
+        //textContentAnnotations: ["test_description"],
+        //embedAttachmentsAsProperty: "testrun_evidence",
+        outputFile: "artifacts/xray-report.xml",
+      },
+    ],
+  ],*/
+  reporter: [["@xray-app/playwright-junit-reporter", { outputFile: "results.xml" }]],
+  //: "allure-playwright",
 };
 
 export default config;
