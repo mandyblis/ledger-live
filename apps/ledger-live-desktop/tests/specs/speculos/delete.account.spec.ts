@@ -29,7 +29,7 @@ for (const [i, account] of accounts.entries()) {
 
     //@TmsLink("B2CQA-320")
 
-    test(`[${account.currency.uiName}] Delete Account`, async ({ page }) => {
+    test(`[${account.currency.uiName}] Delete Account`, async ({ page }, testInfo) => {
       const app = new Application(page);
 
       await app.layout.goToAccounts();
@@ -38,6 +38,8 @@ for (const [i, account] of accounts.entries()) {
 
       await app.account.deleteAccount();
       await app.accounts.expectAccountAbsence(account.accountName);
+
+      testInfo.annotations.push({ type: "test_key", description: "B2CQA-320" });
     });
   });
 }

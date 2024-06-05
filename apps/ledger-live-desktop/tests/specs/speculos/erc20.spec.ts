@@ -11,14 +11,14 @@ test.use({
 const token = "Tether USD";
 
 test.describe.parallel("ERC20 token", () => {
-  //@TmsLink("B2CQA-1079")
-
-  test(`B2CQA-1079 | Check ERC20 token`, async ({ page }) => {
+  test(`Check ERC20 token`, async ({ page }, testInfo) => {
     const app = new Application(page);
 
     await app.layout.goToPortfolio();
     await app.portfolio.navigateToAsset(token);
     await app.account.navigateToToken(token);
     await app.account.expectLastOperationsVisibility();
+
+    testInfo.annotations.push({ type: "test_key", description: "B2CQA-1079" });
   });
 });

@@ -26,7 +26,7 @@ for (const [i, account] of accounts.entries()) {
       speculosOffset: i,
     });
 
-    test(`B2CQA-249 | [${account.currency.uiName}] Receive`, async ({ page }) => {
+    test(`[${account.currency.uiName}] Receive`, async ({ page }, testInfo) => {
       const app = new Application(page);
 
       await app.layout.goToAccounts();
@@ -39,6 +39,8 @@ for (const [i, account] of accounts.entries()) {
 
       await app.speculos.expectValidReceiveAddress(account);
       await app.receive.expectApproveLabel();
+
+      testInfo.annotations.push({ type: "test_key", description: "B2CQA-249" });
     });
   });
 }
