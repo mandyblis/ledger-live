@@ -60,7 +60,7 @@
     "@ledgerhq/live-env": "workspace:*",
     "@ledgerhq/errors": "workspace:*",
     "isomorphic-ws": "5",
-    "ws": "8",
+    "ws": "7",
     "base64-js": "1"
   },
   "devDependencies": {
